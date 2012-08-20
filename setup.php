@@ -185,7 +185,6 @@
 							$cf = configSetting($cf, "database", $_POST['db_database']);
 							$cf = configSetting($cf, "table_prefix", $_POST['db_table_prefix']);
 							$cf = configSetting($cf, "maintenance_http_password", $_POST['maintenance_http_password']);
-							$cf = configSetting($cf, "anywhere_apikey", $_POST['anywhere_apikey']);
 							$cf = configSetting($cf, "follow_me_button", !empty($_POST['follow_me_button']));
 							$cf = configSetting($cf, "smartypants", !empty($_POST['smartypants']));
 							$f  = fopen("inc/config.php", "wt");
@@ -649,13 +648,6 @@ INSTALL LOG: <?php var_dump($log); ?>
 				<label for="smartypants">SmartyPants</label>
 				<div class="field"><input type="checkbox" class="checkbox" name="smartypants" id="smartypants" checked="checked" /></div>
 				<div class="what">Use <a href="http://daringfireball.net/projects/smartypants/" target="_blank">SmartyPants</a> to perfect punctuation inside tweets? Changes all "straight quotes" to &#8220;curly quotes&#8221; and more.</div>
-			</div>
-			
-			<h2>@Anywhere integration</h2>
-			<div class="input lastinput">
-				<label for="anywhere_apikey">@Anywhere API key</label>
-				<div class="field"><input type="text" class="text code" name="anywhere_apikey" id="anywhere_apikey" maxlength="30" value="<?php echo s($_POST['anywhere_apikey']); ?>" /></div>
-				<div class="what">If you want hovercard-style information displayed when you mouseover a Twitter username on your archive, insert your @Anywhere API key here. This is the same as the Consumer key you entered above.</div>
 			</div>
 			
 			<h2>Style settings</h2>

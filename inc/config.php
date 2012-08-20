@@ -24,8 +24,7 @@
 		'maintenance_http_password' => '', 
 		// UNLESS YOU HAVE SSL, IT WILL BE SENT IN CLEAR TEXT, SO MAYBE NOT YOUR TWITTER (or anything else) PASSWORD!
 		
-		// If you want Twitter @Anywhere hovercards on your archive, put your @Anywhere API key here
-		'anywhere_apikey'    => '',
+		// Twitter application: consumer key, consumer secret and callback URL
 		'consumer_key'       => '',
 		'consumer_secret'    => '',
 		'twitter_callback'   => '',
