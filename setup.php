@@ -177,6 +177,8 @@
 							$cf = configSetting($cf, "twitter_screenname", $_POST['twitter_screenname']);
 							$cf = configSetting($cf, "timezone", $_POST['tz']);
 							$cf = configSetting($cf, "path", $sPath);
+							$cf = configSetting($cf, "consumer_key", $_POST['consumer_key']);
+							$cf = configSetting($cf, "consumer_secret", $_POST['consumer_secret']);
 							$cf = configSetting($cf, "hostname", $_POST['db_hostname']);
 							$cf = configSetting($cf, "username", $_POST['db_username']);
 							$cf = configSetting($cf, "password", $_POST['db_password']);
@@ -585,6 +587,20 @@ INSTALL LOG: <?php var_dump($log); ?>
 				<div class="field required"><input type="text" class="text" name="path" id="path" value="<?php echo $_POST['path'] ? s($_POST['path']) : s($path); ?>" /></div>
 				<div class="what">The folder in which you have installed Tweet Nest, i.e. the part after your domain name. If on the root of the domain, simply type <strong>/</strong>. <span class="address">Example: <strong>/tweets</strong></span> for <span class="address">http://pongsocket.com<strong>/tweets</strong></span> (Note: No end slash, please!)</div>
 			</div>
+
+			<h2>Twitter application settings</h2>
+			<div class="note">
+				<p>
+					You need to create an application on <a href="https://dev.twitter.com/">dev.twitter.com</a>
+					for your Tweet Nest install before continuing.
+				</p>
+			</div>
+			<div class="input lastinput">
+				<label for="consumer_key">Consumer key</label>
+				<div class="field required"><input type="text" class="text" name="consumer_key" id="consumer_key" value="" /></div>
+				<label for="consumer_secret">Consumer secret</label>
+				<div class="field required"><input type="text" class="text" name="consumer_secret" id="consumer_secret" value="" /></div>
+			</div>
 			
 			<h2>Database authentication</h2>
 			<div class="input">
@@ -639,7 +655,7 @@ INSTALL LOG: <?php var_dump($log); ?>
 			<div class="input lastinput">
 				<label for="anywhere_apikey">@Anywhere API key</label>
 				<div class="field"><input type="text" class="text code" name="anywhere_apikey" id="anywhere_apikey" maxlength="30" value="<?php echo s($_POST['anywhere_apikey']); ?>" /></div>
-				<div class="what">If you want hovercard-style information displayed when you mouseover a Twitter username on your archive, insert your @Anywhere API key here. <a href="http://dev.twitter.com/anywhere" target="_blank">Here&#8217;s where to get one &rarr;</a></div>
+				<div class="what">If you want hovercard-style information displayed when you mouseover a Twitter username on your archive, insert your @Anywhere API key here. This is the same as the Consumer key you entered above.</div>
 			</div>
 			
 			<h2>Style settings</h2>

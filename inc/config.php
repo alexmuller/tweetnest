@@ -26,6 +26,9 @@
 		
 		// If you want Twitter @Anywhere hovercards on your archive, put your @Anywhere API key here
 		'anywhere_apikey'    => '',
+		'consumer_key'       => '',
+		'consumer_secret'    => '',
+		'twitter_callback'   => '',
 		
 		'follow_me_button'   => true, // Display 'follow me' button?
 		'smartypants'        => true, // Use SmartyPants to perfect punctuation inside tweets?
