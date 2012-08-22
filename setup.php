@@ -179,6 +179,7 @@
 							$cf = configSetting($cf, "path", $sPath);
 							$cf = configSetting($cf, "consumer_key", $_POST['consumer_key']);
 							$cf = configSetting($cf, "consumer_secret", $_POST['consumer_secret']);
+							$cf = configSetting($cf, "twitter_callback", $_POST['twitter_callback']);
 							$cf = configSetting($cf, "hostname", $_POST['db_hostname']);
 							$cf = configSetting($cf, "username", $_POST['db_username']);
 							$cf = configSetting($cf, "password", $_POST['db_password']);
@@ -527,12 +528,11 @@
 			<h2 id="excerpt"><strong>Yay!</strong> Tweet Nest has now been set up on your server. There&#8217;s a couple things left you still need to do:</h2>
 			<ol class="explanation">
 				<li>Remove this <code>setup.php</code> file from your server; it&#8217;s not relevant any longer.</li>
-				<li>Visit the <a href="<?php echo $dPath; ?>/maintenance/loaduser.php" target="_blank">load user</a> and <a href="<?php echo $dPath; ?>/maintenance/loadtweets.php" target="_blank">load tweets</a> pages to load your tweets into the system (log in username is your Twitter screen name). If you didn&#8217;t provide an admin password, you&#8217;ll have to do this through the command lines by executing the following commands:
-					<ul>
-						<li><code>php <?php echo s($fPath); ?>/maintenance/loaduser.php</code></li>
-						<li><code>php <?php echo s($fPath); ?>/maintenance/loadtweets.php</code></li>
-					</ul>
-				The <em>load tweets</em> command will need to be run regularly; the <em>load user</em> command will only need to be run when you change user information like icon, full name or location. <a href="http://pongsocket.com/tweetnest/#installation" target="_blank">More information in the installation guide &rarr;</a>
+				<li><a href="<?php echo $dPath; ?>/maintenance/oauth_redirect.php" target="_blank">Sign in with Twitter</a> so that Tweet Nest can retrieve your tweets.</li>
+				<li>
+					Visit the <a href="<?php echo $dPath; ?>/maintenance/loadtweets.php" target="_blank">load tweets</a> pages to load your tweets into the system (log in username is your Twitter screen name). If you didn&#8217;t provide an admin password, you&#8217;ll have to do this through the command lines by executing the following command:
+					<pre><code>php <?php echo s($fPath); ?>/maintenance/loadtweets.php</code></pre>
+					The <em>load tweets</em> command will need to be run regularly; you can sign in with Twitter again when you change user information like icon, full name or location. <a href="http://pongsocket.com/tweetnest/#installation" target="_blank">More information in the installation guide &rarr;</a>
 				</li>
 				<li>If you changed the write privileges on <code>config.php</code> prior to running the setup guide, you should now change them back to the normal values to prevent unexpected changes to your configuration.</li>
 				<li>Customization! <a href="http://pongsocket.com/tweetnest/#customization" target="_blank">More information in the customization guide &rarr;</a></li>
@@ -594,11 +594,18 @@ INSTALL LOG: <?php var_dump($log); ?>
 					for your Tweet Nest install before continuing.
 				</p>
 			</div>
-			<div class="input lastinput">
+			<div class="input">
 				<label for="consumer_key">Consumer key</label>
-				<div class="field required"><input type="text" class="text" name="consumer_key" id="consumer_key" value="" /></div>
+				<div class="field required"><input type="text" class="text" name="consumer_key" id="consumer_key" value="<?php echo s($_POST['consumer_key']); ?>" /></div>
+			</div>
+			<div class="input">
 				<label for="consumer_secret">Consumer secret</label>
-				<div class="field required"><input type="text" class="text" name="consumer_secret" id="consumer_secret" value="" /></div>
+				<div class="field required"><input type="text" class="text" name="consumer_secret" id="consumer_secret" value="<?php echo s($_POST['consumer_secret']); ?>" /></div>
+			</div>
+			<div class="input lastinput">
+				<label for="twitter_callback">Twitter callback URL</label>
+				<div class="field required"><input type="text" class="text" name="twitter_callback" id="twitter_callback" value="<?php echo s($_POST['twitter_callback']); ?>" /></div>
+				<div class="what">This should be the absolute address of the <code>/maintenance/oauth_callback.php</code> file on the web.</div>
 			</div>
 			
 			<h2>Database authentication</h2>

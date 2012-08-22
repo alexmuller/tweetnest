@@ -9,8 +9,7 @@
 	$connection = new TwitterOAuth($config['consumer_key'], $config['consumer_secret']);
 
 	// Get temporary credentials.
-	$callback_path = $config['twitter_callback'] + "maintenance/oauth_callback.php";
-	$request_token = $connection->getRequestToken("http://localhost:80/maintenance/oauth_callback.php");
+	$request_token = $connection->getRequestToken($config['twitter_callback']);
 
 	// Save temporary credentials to session.
 	$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
