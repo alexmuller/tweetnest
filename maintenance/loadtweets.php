@@ -6,7 +6,7 @@
 	@set_time_limit(0);
 	
 	require_once "mpreheader.php";
-	$p = "";
+	$p = array();
 	
 	// LOGGING
 	// The below is not important, so errors surpressed
@@ -23,7 +23,7 @@
 			"' LIMIT 1"
 		);
 		if($db->numRows($q) > 0){
-			$p = "user_id=" . preg_replace("/[^0-9]+/", "", $_GET['userid']);
+			$p = array("user_id" => preg_replace("/[^0-9]+/", "", $_GET['userid']));
 		} else {
 			dieout(l(bad("Please load the user first.")));
 		}
@@ -34,7 +34,7 @@
 				"' LIMIT 1"
 			);
 			if($db->numRows($q) > 0){
-				$p = "screen_name=" . preg_replace("/[^0-9a-zA-Z_-]+/", "", $_GET['screenname']);
+				$p = array("screen_name" => preg_replace("/[^0-9a-zA-Z_-]+/", "", $_GET['screenname']));
 			} else {
 				dieout(l(bad("Please load the user first.")));
 			}
@@ -43,17 +43,15 @@
 	
 	// Define import routines
 	function totalTweets($p){
-		global $twitterApi;
-		$p = trim($p);
+		global $twitterApi, $connection;
 		if(!$twitterApi->validateUserParam($p)){ return false; }
-		$data = $twitterApi->query("1/users/show.json?" . $p);
+		$data = $connection->get("users/show", $p);
 		if(is_array($data) && $data[0] === false){ dieout(l(bad("Error: " . $data[1] . "/" . $data[2]))); }
 		return $data->statuses_count;
 	}
 	
 	function importTweets($p){
-		global $twitterApi, $db, $config, $access, $search;
-		$p = trim($p);
+		global $twitterApi, $connection, $db, $config, $access, $search;
 		if(!$twitterApi->validateUserParam($p)){ return false; }
 		$maxCount = 200;
 		$tweets   = array();
@@ -93,14 +91,20 @@
 		
 		// Retrieve tweets
 		do {
-			// Determine path to Twitter timeline resource
-			$path =	"1/statuses/user_timeline.json?" . $p . // <-- user argument
-					"&include_rts=true&include_entities=true&count=" . $maxCount .
-					($sinceID ? "&since_id=" . $sinceID : "") . ($maxID ? "&max_id=" . $maxID : "");
+			// Determine parameters to Twitter timeline resource
+			$p["include_rts"] = "true";
+			$p["include_entities"] = "true";
+			$p["count"] = $maxCount;
+			if($sinceID) {
+				$p["since_id"] = $sinceID;
+			}
+			if($maxID) {
+				$p["max_id"] = $maxID;
+			}
 			// Announce
-			echo l("Retrieving page <strong>#" . $page . "</strong>: <span class=\"address\">" . ls($path) . "</span>\n");
+			echo l("Retrieving page <strong>#" . $page . "</strong>\n");
 			// Get data
-			$data = $twitterApi->query($path);
+			$data = $connection->get("statuses/user_timeline", $p);
 			// Drop out on connection error
 			if(is_array($data) && $data[0] === false){ dieout(l(bad("Error: " . $data[1] . "/" . $data[2]))); }
 			
@@ -160,9 +164,12 @@
 		// Resetting these
 		$favs  = array(); $maxID = 0; $sinceID = 0; $page = 1;
 		do {
-			$path = "1/favorites.json?" . $p . "&count=" . $maxCount . ($maxID ? "&max_id=" . $maxID : "");
-			echo l("Retrieving page <strong>#" . $page . "</strong>: <span class=\"address\">" . ls($path) . "</span>\n");
-			$data = $twitterApi->query($path);
+			$p["count"] = $maxCount;
+			if($maxID) {
+				$p["max_id"] = $maxID;
+			}
+			echo l("Retrieving page <strong>#" . $page . "</strong>\n");
+			$data = $connection->get("favorites", $p);
 			if(is_array($data) && $data[0] === false){ dieout(l(bad("Error: " . $data[1] . "/" . $data[2]))); }
 			echo l("<strong>" . ($data ? count($data) : 0) . "</strong> total favorite tweets on this page\n");
 			if(!empty($data)){
@@ -199,7 +206,7 @@
 			while($u = $db->fetch($q)){
 				$uid = preg_replace("/[^0-9]+/", "", $u['userid']);
 				echo l("<strong>Trying to grab from user_id=" . $uid . "...</strong>\n");
-				importTweets("user_id=" . $uid);
+				importTweets(array("user_id" => $uid));
 			}
 		} else {
 			echo l(bad("No users to import to!"));

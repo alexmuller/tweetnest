@@ -62,20 +62,20 @@
 		//TODO: BUILD IN SUPPORT FOR "RATE LIMIT EXCEEDED"
 		
 		public function validateUserParam($p){
-			return (preg_match("/^user_id=[0-9]+$/", $p) || preg_match("/^screen_name=[0-9a-zA-Z_]+$/", $p));
+			return (preg_match("/[0-9]+$/", $p["user_id"]) || preg_match("/[0-9a-zA-Z_]+$/", $p["screen_name"]));
 		}
 		
 		public function getUserParam($str){
-			list($name, $value) = explode("=", $str, 2);
-			return array("name" => $name, "value" => $value);
+			$keys = array_keys($str);
+			return array("name" => $keys[0], "value" => $str[$keys[0]]);
 		}
 		
 		public function userId($i){
-			return "user_id=" . $i;
+			return array("user_id" => $i);
 		}
 		
 		public function screenName($str){
-			return "screen_name=" . $str;
+			return array("screen_name" => $str);
 		}
 		
 		public function getUserId($screenname){
