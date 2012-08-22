@@ -33,6 +33,12 @@
 	require "class.twitterapi.php";
 	$twitterApi = new TwitterApi();
 	
+	// abraham's twitteroauth PHP library
+	// This may break non-64-bit installs because of json_decode?
+	$ds   = preg_quote(DIRECTORY_SEPARATOR, "/");
+	$dir  = str_replace(DIRECTORY_SEPARATOR, "/", preg_replace("/" . $ds . "[^" . $ds . "]*$/", "", __FILE__));
+	require $dir . "/../lib/twitteroauth.php";
+	
 	// Search
 	require "class.search.php";
 	$search = new TweetNestSearch();
@@ -86,6 +92,12 @@
 	$author      = $db->fetch($authorQ);
 	$authorextra = unserialize($author['extra']);
 	global $author, $authorextra;
+
+	// Once we've got the author, set up a connection to the Twitter API
+	if($author['oauth_token'] && $author['oauth_token_secret']) {
+		$connection = new TwitterOAuth($config['consumer_key'], $config['consumer_secret'], $author['oauth_token'], $author['oauth_secret']);
+		global $connection;
+	}
 	
 	function getURL($url, $auth = NULL){
 		// HTTP grabbin' cURL options, also exsecror

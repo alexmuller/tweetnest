@@ -4,7 +4,6 @@
 	require "mpreheader.php";
 	$pageTitle = "Redirecting you to Twitter to authenticate...";
 	require "mheader.php";
-	require_once "../lib/twitteroauth.php";
 
 	// Build TwitterOAuth object with client credentials.
 	$connection = new TwitterOAuth($config['consumer_key'], $config['consumer_secret']);
