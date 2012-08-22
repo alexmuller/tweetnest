@@ -95,7 +95,7 @@
 
 	// Once we've got the author, set up a connection to the Twitter API
 	if($author['oauth_token'] && $author['oauth_token_secret']) {
-		$connection = new TwitterOAuth($config['consumer_key'], $config['consumer_secret'], $author['oauth_token'], $author['oauth_secret']);
+		$connection = new TwitterOAuth($config['consumer_key'], $config['consumer_secret'], $author['oauth_token'], $author['oauth_token_secret']);
 		global $connection;
 	}
 	
